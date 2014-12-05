@@ -1,0 +1,87 @@
+#CT 206 Perl Assignment 2a
+#10/1/2013
+#This program reads the lines of a text file that contains emails and then finds each of the subjects and counts
+# how many times that subject is used in an email. It outputs the subjects that were used more than once,
+# outputs the most used subject, and outputs the number of subjects that were mentioned only once.
+# On a scale of 1-4 I rate this code a .... 
+# Overall functionality of the existing code:  4
+# Readability: 4
+# Easily modified command line parameters: 3
+# Easily switched it to use 'Email:' as well as 'Subject:' depending on user request: 4
+
+$input_file;													#create a variable for the input file name
+%counter;														#create a hash for the file counter!
+
+sub max
+{
+	@myhash = %counter;											#set an array equal to the values contained in the counter hash
+	$currentMax = $my_value[0];									#set the currentMax variable equal to the first value from the my_value array
+	for ($i=0; $i<@myhash; $i++)								#for each value in the my_value array
+	{
+		if ($myhash[$i] > $currentMax) 							#if the default variable is greater than the currentmax
+		{
+			$currentMax = $myhash[$i];	 						#set the currentmax variable equal to the default variable
+		}
+	}
+}
+
+if ($ARGV[0] ne '')												#if there is a command-line argument
+{
+	$input_file = $ARGV[0];										#set the $input variable equal to that first argument
+	$email = $ARGV[1];											#email argument -brad
+	printf("Thank you for choosing file: %s.\n", $input_file); 	#output the file name
+}
+else 															#if there is no command-line argument
+{
+	print "Enter the file name to be examined: ";				#prompt user to enter a file name
+	$input_file = <STDIN>;	#user input creates the $input variable
+	printf("Thank you for choosing file: %s.\n", $input_file);	#output the file name
+}																
+
+open (MYFILE, $input_file) or die "Could not open file \'$input_file\'... $!";
+#open the file MYFILE. If it can't be open, kill it! And let the user know too...
+
+if($email eq 'email'){
+while($line = <MYFILE>)										#while there are still new lines in the file
+{
+	chomp($line);												#get rid of the newline character from each line
+	if ($line =~ /From: /)									#if the line begins with Subject: , then do the following
+	{
+		++$counter{$line};											#take a count of each topic line into the %counter hash (the $' grabs the remaining string after Subject: )
+	}
+}
+}
+else
+{
+while($line = <MYFILE>)										#while there are still new lines in the file
+{
+	chomp($line);												#get rid of the newline character from each line
+	if ($line =~ /Subject: /)									#if the line begins with Subject: , then do the following
+	{
+		++$counter{$line};											#take a count of each topic line into the %counter hash (the $' grabs the remaining string after Subject: )
+	}
+}
+close (MYFILE);													#close the file, we're done using it!
+}
+foreach $topic (sort(keys %counter))							#for each unique email topic, sort by each key in the %counter hash
+{
+	if (($counter{$topic}) > 1) 								#if each subject in the counter hash has more than 1 hit, then  do the following
+	{
+		printf("Tally: %d\t %s\n", $counter{$topic}, $topic);	#print the tally for each key in the %counter hash along with the topic name
+	}
+	else 														#if the amount of hits is not greater than 1 for each subject then
+	{ 
+		++$solo_counter;										#increment our counter variable to keep track of the amount of single hit subjects
+	}
+}
+&max;															#call "max" subroutine from the beginning of the program
+foreach $topic (sort keys %counter)			 					#run this loop for each key in the counter hash
+{
+	if ($counter{$topic} == $currentMax)						#if the value attached to the current key is equal to the max number of posts
+	{
+		printf "\nHighest value: %d hits for %s\n", $counter{$topic}, $topic;		#output that subject with the amount of hits!
+		
+		printf "\nThere are %d subjects that only appeared once in this file and are therefore ignored by this program!\n", $solo_counter; 
+					#print the counter variable which shows how many subjects only had one hit. this saves space!
+	}
+}
