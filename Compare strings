@@ -1,0 +1,13 @@
+$Name1 = "Professor";
+$Name2 = "Antunes";
+@grades = wq(A, B, C, D, E, F);
+if ($Name1 eq $Name2 ) {
+      print "These names are identical.\n";
+      print 'You get an @grades[0]\n';
+} elsif ($Name1 = reverse ($Name2)) {
+     print "These names are inverses of each other./n";
+     print "You get an " . $grades[1] . "\n";
+} else
+     print "These names are not very much alike.\n";
+     print $grades[$#grades] . '\n';
+};
