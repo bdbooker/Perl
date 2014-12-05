@@ -1,0 +1,48 @@
+#Brad Booker
+#Perl1A 9/27/13
+
+$File_master;
+%times;
+
+sub max{ #subroutine that computes the subject with the most hits
+ @number = %times;
+ $Max = $number[0];
+ for ($i=0; $i<@number ;$i++){
+ if($number[$i] > $Max){
+ $Max = $number[$i];}}}
+
+if ($ARGV[0] ne '') #check for the file and if null ask for the file
+{  
+$File_master = $ARGV[0];
+printf (" YOU CHOSE THE %s FILE", $File_master );
+}
+else #if nothing there
+{
+print "WHAT FILE DO YOU WANT TO ME TO SEARCH?";
+$File_master=<STDIN>; 
+printf (" YOU CHOSE THE %s FILE", $File_master );
+}
+open FILE, $File_master or die "CAN'T OPEN THE $File_master FILE!";
+#open file and then kill if the file doesn't open
+while($subject = <FILE>){ #count number of times a subject appears
+chomp($subject);
+if ($subject =~ /Subject/){
+++$times{$subject};}}
+close(FILE); # close file
+
+&max;
+
+foreach $word (sort(keys %times)){ # count times logged for the subjects
+if ($times{$word} > 1){
+printf("Number of times logged: %d\t %s\n",$times{$word}, $word) ;
+}else{
+++$count; #number of subjects with one hit
+}}
+
+
+foreach $word(sort (keys %times)){ #print out highest value and number of subjects with one hit
+if ( $times{$word} == $Max)
+{ printf("Highest value:  %d\t %s\n",$times{$word}, $word) ;
+printf("Number of subjects with single hits %d\n", $count) ;
+}
+}
