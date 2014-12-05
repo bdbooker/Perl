@@ -1,0 +1,8 @@
+$secret = 4;
+$year = 1993;
+$secret = $secret * 2;
+$secret = $secret + 5;
+$secret = $secret * 50;
+$secret = $secret + 1761;
+$secret = $secret - 1993;
+print $secret 
